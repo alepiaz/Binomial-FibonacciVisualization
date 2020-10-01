@@ -29,45 +29,40 @@ class BinomialHeap:
                 min = self.heap[i].k
         return min
 
-    def mergeTree(p, q):
-        if p.k <= q.k:
-            return p.addChild(q)
-        else:
-            return q.addChild(p)
+    def combine_roots(self, p):
+        self.heap.extend(p.heap)
+        self.heap.sort(key = lambda tree : tree.rank)
 
     def union(self, p):
-        # print("p", p)
-        self.heap.extend(p)
+        self.combine_roots(p)
         if self.heap == []:
             print("Both binomial heap are empty")
             return
-        self.heap.sort(key = lambda tree : tree.rank)
-        # print(range(0,len(self.heap)-1))
         i = 0
         while i < len(self.heap)-1:
-            # print (i)
             x = self.heap[i]
-            next = self.heap[i+1]
-            if x.rank == next.rank:
-                if i < len(self.heap)-2 and self.heap[i+2].rank == next.rank:
+            succ = self.heap[i+1]
+            if x.rank == succ.rank:
+                if i+1 < len(self.heap)-1 and self.heap[i+2].rank == succ.rank:
                     nextnext = self.heap[i+2]
-                    if next.k < nextnext.k:
-                        next.addChild(nextnext)
+                    if succ.k < nextnext.k:
+                        succ.addChild(nextnext)
                         del self.heap[i+2]
                     else:
-                        nextnext.addChild(next)
+                        nextnext.addChild(succ)
                         del self.heap[i+1]
                 else:
-                    if x.k < next.k:
-                        x.addChild(next)
+                    if x.k < succ.k:
+                        x.addChild(succ)
                         del self.heap[i+1]
                     else:
-                        next.addChild(x)
+                        succ.addChild(x)
                         del self.heap[i]
-            i+=1
+            else:
+                i+=1
     def insert(self, k):
         y = BinomialHeap(BinomialTree(k))
-        self.union(y.heap)
+        self.union(y)
 
     def extractMin(self):
         if self.heap == []:
@@ -80,8 +75,10 @@ class BinomialHeap:
                 min = h
         self.heap.remove(min)
         y = min.children
-        # print ("y",y)
-        self.union(y)
+        H = BinomialHeap()
+        H.heap = min.children
+        self.union(H)
+
         return min.k
 
     def findNode(self, j):
