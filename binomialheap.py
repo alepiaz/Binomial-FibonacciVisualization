@@ -107,6 +107,30 @@ class BinomialHeap:
                 for i in c.children:
                     print(i.k)
 
+    def generateDot(self):
+        text = generateDot_r(self.heap)
+        return text
+
+    def visualizeTree(self):
+        dot_text = """digraph G {
+
+          node [margin=0 fontcolor=blue fontsize=15 width=0.5 shape=circle style=filled]
+          edge [dir=none]
+          %s
+        }""" % self.generateDot()
+        return dot_text
+
+
+def generateDot_r(nodes):
+    if nodes == []:
+        return ""
+    text = ""
+    for n in nodes:
+        for c in n.children:
+            text+=str("{0} -> {1}\n".format(n.k,c.k))
+        text+=generateDot_r(n.children)
+    return text
+
 def findNode_r(nodes, j):
     if nodes == []:
         return None
