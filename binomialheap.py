@@ -1,3 +1,8 @@
+from graphviz import Source
+import numpy as np
+import cv2
+import io
+import time
 
 class BinomialTree:
 
@@ -113,12 +118,17 @@ class BinomialHeap:
 
     def visualizeTree(self):
         dot_text = """digraph G {
-
-          node [margin=0 fontcolor=blue fontsize=15 width=0.5 shape=circle style=filled]
-          edge [dir=none]
-          %s
+            node [margin=0 fontcolor=blue fontsize=15 width=0.5 shape=circle style=filled]
+            edge [dir=none]
+            %s
         }""" % self.generateDot()
-        return dot_text
+        dot = Source(dot_text)
+        # nparr = np.fromstring(dot.pipe('png'), dtype=np.uint8)
+        # img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # cv2.imshow('image',img_np)
+        dot.view()
+        time.sleep(5)
+
 
 
 def generateDot_r(nodes):
@@ -126,6 +136,8 @@ def generateDot_r(nodes):
         return ""
     text = ""
     for n in nodes:
+        if n.children == []:
+            text+=str("{0} ".format(n.k))
         for c in n.children:
             text+=str("{0} -> {1}\n".format(n.k,c.k))
         text+=generateDot_r(n.children)
