@@ -68,6 +68,7 @@ class BinomialHeap:
     def insert(self, k):
         y = BinomialHeap(BinomialTree(k))
         self.union(y)
+        return self
 
     def extractMin(self):
         if self.heap == []:
@@ -123,11 +124,10 @@ class BinomialHeap:
             %s
         }""" % self.generateDot()
         dot = Source(dot_text)
-        # nparr = np.fromstring(dot.pipe('png'), dtype=np.uint8)
+        # nparr = np.fromstring(dot.pipe('jpg'),np.uint8)
         # img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         # cv2.imshow('image',img_np)
-        dot.view()
-        time.sleep(5)
+        dot.render("graph","data/cache",format="png")
 
 
 
