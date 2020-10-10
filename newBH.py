@@ -114,16 +114,17 @@ class BinomialHeap:
 
         return H
 
-    def search(self, k):
-        x = self.H
+    def search(self, k, x = None):
+        if (x == None):
+            x = self.H
         p = None
         if (x.n == k):
             p = x
             return p
         if (x.child != None and p == None):
-            p = self.search(x.child,k)
+            p = self.search(k, x.child)
         if (x.sibling != None and p == None):
-            p = self.search(x.sibling,k)
+            p = self.search(k, x.sibling)
 
         return p
 
@@ -174,6 +175,30 @@ class BinomialHeap:
         self.union(H1,self.Hr)
         return x
 
+    def decreaseKey(self,i,k):
+        p = self.search(i)
+        if (p == None):
+            print("Chiave non trovata")
+            return
+        if (k > p.n):
+            print("Il nuovo valore deve essere minore del vecchio")
+
+        p.n = k
+        y = p
+        z = p.parent
+        tmp = 0
+        while (z != None and y.n < z.n):
+            tmp = y.n
+            y.n = z.n
+            z.n = tmp
+            y = z
+            z = z.parent
+
+    def delete(self,k):
+        if (self.H == None):
+            print("L'heap è vuoto")
+        self.decreaseKey(k,float("-inf"))
+        self.extractMin()
 
 
     def info(self, H = None):
@@ -229,5 +254,7 @@ BH.insert(2)
 BH.insert(11)
 BH.insert(4)
 BH.insert(19)
-BH.extractMin()
+# BH.extractMin()
+BH.delete(4)
+# BH.decreaseKey(3,1)
 BH.visualizeTree()
