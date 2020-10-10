@@ -17,4 +17,10 @@ bheap.insert(2)
 bheap.insert(11)
 # bheap.visualizeTree()
 bheap.insert(4)
+
+# print(bheap.findNode(11))
+# bheap.delete(11)
+bheap.delete(3)
+# bheap.delete(9)
+
 bheap.visualizeTree()

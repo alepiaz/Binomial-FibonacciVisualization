@@ -88,8 +88,17 @@ class BinomialHeap:
         return min.k
 
     def findNode(self, j):
-        node = findNode_r(self.heap, j)
-        return node
+        # node = findNode_r(self.heap, j)
+        nodes = self.heap
+        while nodes:
+            n = nodes[0]
+            if n.k != j:
+                nodes.remove(n)
+                if n.k < j:
+                    nodes.extend(n.children)
+            elif n.k == j:
+                return n
+        return None
 
     def decreaseKey(self, x, h):
         if h > x.k:
@@ -103,7 +112,16 @@ class BinomialHeap:
             y = z
             z = y.parent
 
-    # def delete(self, x):
+    def delete(self, x):
+        n = self.findNode(x)
+        if n:
+            self.decreaseKey(n,float("-inf"))
+            # self.extractMin()
+        else:
+            print("node not found")
+        return self
+
+
     def printAllNodes(self):
         child_list = []
         for h in self.heap:
@@ -147,9 +165,9 @@ def findNode_r(nodes, j):
     if nodes == []:
         return None
     for n in nodes:
+        print (n.k)
         if n.k <= j:
             if n.k == j:
-                return n.k
-            elif n.children != []:
+                return n
+            elif n.rank != 0:
                 return findNode_r(n.children, j)
-    return None
