@@ -38,9 +38,12 @@ class App(QMainWindow):
         self.button_ins.move(100,20)
         self.button_del = QPushButton('Delete', self)
         self.button_del.move(100,50)
+        self.button_min = QPushButton('Extract min', self)
+        self.button_min.move(220,20)
         # connect button to function on_click
         self.button_ins.clicked.connect(self.insert)
         self.button_del.clicked.connect(self.delete)
+        self.button_min.clicked.connect(self.extractMin)
         self.textbox_ins.returnPressed.connect(self.insert)
         self.textbox_del.returnPressed.connect(self.delete)
         self.show()
@@ -77,12 +80,9 @@ class App(QMainWindow):
         # self.svgWidget.show()
         # svgWidget.show()
 
-    @pyqtSlot()
-    def insert(self):
-        textboxValue = self.textbox_ins.text()
-        self.BHeap.insert(int(textboxValue))
+
+    def updateImg(self):
         self.BHeap.visualizeTree()
-        self.FHeap.insert(int(textboxValue))
         self.FHeap.visualizeTree()
         self.pixmap = (QPixmap("data/cache/graph.png"))
         self.label.setPixmap(self.pixmap)
@@ -94,26 +94,28 @@ class App(QMainWindow):
         self.label2.setFixedSize(self.pixmap2.size())
         self.label2.setScaledContents(True)
         self.label2.setGeometry(450,120,300,300)
+
+
+    @pyqtSlot()
+    def insert(self):
+        textboxValue = self.textbox_ins.text()
+        self.BHeap.insert(int(textboxValue))
+        self.FHeap.insert(int(textboxValue))
+        self.updateImg()
         self.textbox_ins.setText("")
+
+    def extractMin(self):
+        self.BHeap.extractMin()
+        self.FHeap.extractMin()
+        self.updateImg()
 
     @pyqtSlot()
     def delete(self):
         textboxValue = self.textbox_del.text()
         self.BHeap.delete(int(textboxValue))
-        self.BHeap.visualizeTree()
         self.FHeap.delete(int(textboxValue))
-        self.FHeap.visualizeTree()
-        self.pixmap = (QPixmap("data/cache/graph.png"))
-        self.label.setPixmap(self.pixmap)
-        self.label.setFixedSize(self.pixmap.size())
-        self.label.setScaledContents(True)
-        self.label.setGeometry(50,120,300,300)
-        self.pixmap2 = (QPixmap("data/cache/fgraph.png"))
-        self.label2.setPixmap(self.pixmap2)
-        self.label2.setFixedSize(self.pixmap2.size())
-        self.label2.setScaledContents(True)
-        self.label2.setGeometry(450,120,300,300)
-        self.textbox_ins.setText("")
+        self.updateImg()
+        self.textbox_del.setText("")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
