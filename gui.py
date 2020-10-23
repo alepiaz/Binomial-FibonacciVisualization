@@ -12,9 +12,10 @@ class App(QMainWindow):
         self.title = 'Binomial heap visualization'
         self.left = 10
         self.top = 10
-        self.width = 500
-        self.height = 480
+        self.width = 900
+        self.height = 460
         self.BHeap = BinomialHeap()
+        self.FHeap = FibonacciHeap()
         self.initUI()
 
 
@@ -24,30 +25,44 @@ class App(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         # Create textbox
-        self.textbox = QLineEdit(self)
-        self.textbox.move(20,20)
-        self.textbox.resize(70,30)
+        self.textbox_ins = QLineEdit(self)
+        self.textbox_ins.move(20,20)
+        self.textbox_ins.resize(70,30)
+
+        self.textbox_del = QLineEdit(self)
+        self.textbox_del.move(20,50)
+        self.textbox_del.resize(70,30)
 
         # Create a button in the window
-        self.button = QPushButton('Insert', self)
-        self.button.move(100,20)
-
+        self.button_ins = QPushButton('Insert', self)
+        self.button_ins.move(100,20)
+        self.button_del = QPushButton('Delete', self)
+        self.button_del.move(100,50)
         # connect button to function on_click
-        self.button.clicked.connect(self.on_click)
-        self.textbox.returnPressed.connect(self.on_click)
+        self.button_ins.clicked.connect(self.insert)
+        self.button_del.clicked.connect(self.delete)
+        self.textbox_ins.returnPressed.connect(self.insert)
+        self.textbox_del.returnPressed.connect(self.delete)
         self.show()
 
 
 
         self.BHeap.visualizeTree()
+        self.FHeap.visualizeTree()
         self.label = QLabel(self)
+        self.label2 = QLabel(self)
         # self.label.setGeometry(QRect(50,80,300,300))
         self.pixmap = (QPixmap("data/cache/graph.png"))
+        self.pixmap2 = (QPixmap("data/cache/fgraph.png"))
         self.label.setPixmap(self.pixmap)
+        self.label2.setPixmap(self.pixmap2)
         # self.label.setFixedSize(self.pixmap.size())
         self.label.setScaledContents(True)
         self.label.setGeometry(50,120,300,300)
         self.label.show()
+        self.label2.setScaledContents(True)
+        self.label2.setGeometry(450,120,300,300)
+        self.label2.show()
 
         # self.label.setPixmap(self.qp)
         # self.setCentralWidget(self.label)
@@ -63,16 +78,42 @@ class App(QMainWindow):
         # svgWidget.show()
 
     @pyqtSlot()
-    def on_click(self):
-        textboxValue = self.textbox.text()
+    def insert(self):
+        textboxValue = self.textbox_ins.text()
         self.BHeap.insert(int(textboxValue))
         self.BHeap.visualizeTree()
+        self.FHeap.insert(int(textboxValue))
+        self.FHeap.visualizeTree()
         self.pixmap = (QPixmap("data/cache/graph.png"))
         self.label.setPixmap(self.pixmap)
-        # self.label.setFixedSize(self.pixmap.size())
+        self.label.setFixedSize(self.pixmap.size())
         self.label.setScaledContents(True)
         self.label.setGeometry(50,120,300,300)
-        self.textbox.setText("")
+        self.pixmap2 = (QPixmap("data/cache/fgraph.png"))
+        self.label2.setPixmap(self.pixmap2)
+        self.label2.setFixedSize(self.pixmap2.size())
+        self.label2.setScaledContents(True)
+        self.label2.setGeometry(450,120,300,300)
+        self.textbox_ins.setText("")
+
+    @pyqtSlot()
+    def delete(self):
+        textboxValue = self.textbox_del.text()
+        self.BHeap.delete(int(textboxValue))
+        self.BHeap.visualizeTree()
+        self.FHeap.delete(int(textboxValue))
+        self.FHeap.visualizeTree()
+        self.pixmap = (QPixmap("data/cache/graph.png"))
+        self.label.setPixmap(self.pixmap)
+        self.label.setFixedSize(self.pixmap.size())
+        self.label.setScaledContents(True)
+        self.label.setGeometry(50,120,300,300)
+        self.pixmap2 = (QPixmap("data/cache/fgraph.png"))
+        self.label2.setPixmap(self.pixmap2)
+        self.label2.setFixedSize(self.pixmap2.size())
+        self.label2.setScaledContents(True)
+        self.label2.setGeometry(450,120,300,300)
+        self.textbox_ins.setText("")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
