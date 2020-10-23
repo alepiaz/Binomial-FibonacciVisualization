@@ -1,12 +1,8 @@
 digraph G {
     node [margin=0 fontcolor=blue fontsize=15 width=0.5 shape=circle style=filled]
     edge [dir=none]
-    9 
-4 
+    6 
 3 
-3->19
-3->5
-5->6
-4->11
+5 
 
 }
