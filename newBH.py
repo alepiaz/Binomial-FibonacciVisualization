@@ -227,13 +227,16 @@ class BinomialHeap:
         p = H
 
         if (p.parent != None):
-            text+="{0}->{1}\n".format(p.parent.n,p.n)
+            text+="{0}->{1}\n".format(str(id(p.parent)),str(id(p.n)))
+            text+= "{0} [label={1}]".format(str(id(p.parent)),p.parent.n)
+            text+= "{0} [label={1}]".format(str(id(p)),p.n)
         if (p.sibling != None):
             text=self.generateDot(p.sibling)+text
         if (p.child != None):
             text+=self.generateDot(p.child)
         if (p.parent == None):
             text="{0} \n".format(p.n)+text
+            text+= "{0} [label={1}]".format(str(id(p)),p.n)
         return text
 
     def visualizeTree(self, name = "graph"):

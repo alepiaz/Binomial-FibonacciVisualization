@@ -184,9 +184,10 @@ class BinomialHeap:
         p = self.search(i)
         if (p == None):
             print("Chiave non trovata")
-            return
+            return None
         if (k > p.n):
             print("Il nuovo valore deve essere minore del vecchio")
+            return 1
 
         p.n = k
         y = p
@@ -202,7 +203,10 @@ class BinomialHeap:
     def delete(self,k):
         if (self.H == None):
             print("L'heap è vuoto")
-        self.decreaseKey(k,float("-inf"))
+            return
+        d = self.decreaseKey(k,float("-inf"))
+        if not d:
+            return
         self.extractMin()
 
 
@@ -232,13 +236,16 @@ class BinomialHeap:
         p = H
 
         if (p.parent != None):
-            text+="{0}->{1}\n".format(p.parent.n,p.n)
+            text+="{0}->{1}\n".format(str(id(p.parent)),str(id(p)))
+            text+= "{0} [label={1}]\n".format(str(id(p.parent)),p.parent.n)
+            text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
         if (p.sibling != None):
             text=self.generateDot(p.sibling)+text
         if (p.child != None):
             text+=self.generateDot(p.child)
         if (p.parent == None):
-            text="{0} \n".format(p.n)+text
+            text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
+
         return text
 
     def visualizeTree(self, name = "graph"):
@@ -416,20 +423,25 @@ class FibonacciHeap:
                     if (curr.n == x):
                         return curr
                     curr = curr.right
+        return None
 
 
     def decreaseKey(self,h,k):
         x = self.search(h)
-        if (k > x.n):
-            return None
-            print("La nuova chiave deve essere minore della chiave attuale")
-        x.n = k
-        y = x.parent
-        if (y != None and x.n < y.n):
-            self.cut(x,y)
-            self.cascadingCut(y)
-        if (x.n < self.min.n):
-            self.min = x
+        if (x):
+            if (k > x.n):
+                return None
+                print("La nuova chiave deve essere minore della chiave attuale")
+            x.n = k
+            y = x.parent
+            if (y != None and x.n < y.n):
+                self.cut(x,y)
+                self.cascadingCut(y)
+            if (x.n < self.min.n):
+                self.min = x
+            return 1
+        else:
+            return 0
 
     def removeChildList(self, parent, node):
         if (parent.child == parent.child.right):
@@ -442,8 +454,10 @@ class FibonacciHeap:
 
 
     def delete(self,x):
-        self.decreaseKey(x,float("-1000"))
-        self.extractMin()
+
+        d = self.decreaseKey(x,float("-inf"))
+        if d:
+            self.extractMin()
 
 
     def info(self,x = None):
@@ -473,45 +487,15 @@ class FibonacciHeap:
         s = S
         # self.info(p)
         if (p.parent != None):
-            text+="{0}->{1}\n".format(p.parent.n,p.n)
+            text+="{0}->{1}\n".format(str(id(p.parent)),str(id(p)))
+            text+= "{0} [label={1}]\n".format(str(id(p.parent)),p.parent.n)
+            text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
         if (p.left != None and s != p.left):
             text+=self.generateDot(p.left,s)
         if (p.child != None):
             text+=self.generateDot(p.child,p.child)
         if (p.parent == None):
-            text+="{0} \n".format(p.n)
+            # text+="{0} \n".format(p.n)
+            text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
+        print(text)
         return text
-
-BH = BinomialHeap()
-FH = FibonacciHeap()
-BH.insert(1)
-FH.insert(1)
-BH.insert(3)
-FH.insert(3)
-BH.insert(5)
-FH.insert(5)
-BH.insert(6)
-FH.insert(6)
-BH.insert(9)
-FH.insert(9)
-BH.insert(2)
-FH.insert(2)
-BH.insert(11)
-FH.insert(11)
-BH.insert(4)
-FH.insert(4)
-BH.insert(19)
-FH.insert(19)
-BH.delete(1)
-FH.delete(1)
-BH.delete(2)
-FH.delete(2)
-BH.visualizeTree()
-FH.visualizeTree()
-# BH.extractMin()
-# BH.extractMin()
-# print(BH.H.child.n)
-# # BH.extractMin()
-# BH.delete(4)
-# BH.decreaseKey(3,1)
-# BH.visualizeTree()
