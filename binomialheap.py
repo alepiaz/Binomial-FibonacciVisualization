@@ -444,7 +444,6 @@ class FibonacciHeap:
     def delete(self,x):
         self.decreaseKey(x,float("-1000"))
         self.extractMin()
-        print("here")
 
 
     def info(self,x = None):
