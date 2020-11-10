@@ -48,18 +48,20 @@ class App(QMainWindow):
         self.textbox_del.returnPressed.connect(self.delete)
         self.show()
 
+        self.BTitle = QLabel().setText("Binomial Heap")
+        # self.BTitle.move(20,100)
+
+
 
 
         self.BHeap.visualizeTree()
         self.FHeap.visualizeTree()
         self.label = QLabel(self)
         self.label2 = QLabel(self)
-        # self.label.setGeometry(QRect(50,80,300,300))
         self.pixmap = (QPixmap("data/cache/graph.png"))
         self.pixmap2 = (QPixmap("data/cache/fgraph.png"))
         self.label.setPixmap(self.pixmap)
         self.label2.setPixmap(self.pixmap2)
-        # self.label.setFixedSize(self.pixmap.size())
         self.label.setScaledContents(True)
         self.label.setGeometry(50,120,300,300)
         self.label.show()
@@ -67,18 +69,6 @@ class App(QMainWindow):
         self.label2.setGeometry(450,120,300,300)
         self.label2.show()
 
-        # self.label.setPixmap(self.qp)
-        # self.setCentralWidget(self.label)
-        # self.qp.show()
-
-
-        # self.svgWidget = QSvgWidget(self)
-        # self.svgWidget.move(50,80)
-        # self.svgWidget.setMaximumSize(300,300)
-        # # self.svgWidget.setGeometry(50,80,300,300)
-        # self.svgWidget.load('data/cache/graph.svg')
-        # self.svgWidget.show()
-        # svgWidget.show()
 
 
     def updateImg(self):

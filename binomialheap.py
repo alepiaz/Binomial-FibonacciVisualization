@@ -1,12 +1,24 @@
 from graphviz import Source
 import math
 from datetime import datetime
+import time
 
 DOT = """digraph G {
     node [margin=0 fontcolor=blue fontsize=15 width=0.5 shape=circle style=filled]
     edge [dir=none]
     %s
 }"""
+
+
+def timing(f):
+    time1 = time.time()
+    time2 = None
+    def wrap(*args):
+        ret = f(*args)
+        time2 = time.time()
+        text = ('%s function took %0.3f ms' % (f.__qualname__, (time2-time1)*1000.0))
+        return ret, text
+    return wrap
 
 class Node:
 
@@ -47,17 +59,13 @@ class BinomialHeap:
         self.Hr = None
 
 
-
-
-    # def initializeHeap(self):
-    #     return None
-
     def binomialLink(self,y,z):
         y.parent = z
         y.sibling = z.child
         z.child = y
         z.degree +=1
 
+    @timing
     def insert(self,x):
         n = Node(x)
         self.union(self.H,n)
@@ -223,10 +231,6 @@ class BinomialHeap:
             if x.parent:
                 p = x.parent.n
             print("n:{0} c:{1} s:{2} p:{3}".format(x.n,c,s,p))
-        # if (x.child != None):
-        #     self.info(x.child)
-        # if (x.sibling != None):
-        #     self.info(x.sibling)
 
 
     def generateDot(self,H):
@@ -297,6 +301,7 @@ class FibonacciHeap:
         n.left.right = n.right
         n.right.left = n.left
 
+    @timing
     def insert(self, k):
         x = Node(k)
         x.left = x.right = x
@@ -338,7 +343,6 @@ class FibonacciHeap:
             print("L'heap è vuoto")
             return
         start = p
-        print(p.n)
         p = p.right
         while (p != start):
             print("-->{0}".format(p.n))
@@ -485,7 +489,6 @@ class FibonacciHeap:
             return text
         p = H
         s = S
-        # self.info(p)
         if (p.parent != None):
             text+="{0}->{1}\n".format(str(id(p.parent)),str(id(p)))
             text+= "{0} [label={1}]\n".format(str(id(p.parent)),p.parent.n)
@@ -495,7 +498,5 @@ class FibonacciHeap:
         if (p.child != None):
             text+=self.generateDot(p.child,p.child)
         if (p.parent == None):
-            # text+="{0} \n".format(p.n)
             text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
-        print(text)
         return text
