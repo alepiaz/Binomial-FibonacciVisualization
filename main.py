@@ -25,15 +25,43 @@ import time
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
+        self.showMaximized()
         self.BHeap = BinomialHeap()
         self.FHeap = FibonacciHeap()
         self.setupUi(self)
+        self.radioBF.setChecked(True)
         self.button_ins.clicked.connect(self.insert)
         self.button_del.clicked.connect(self.delete)
         self.button_min.clicked.connect(self.extractMin)
-        self.textbox_ins.returnPressed.connect(self.insert)
         self.textbox_del.returnPressed.connect(self.delete)
+        self.textbox_ins.returnPressed.connect(self.insert)
+        self.button_reset.clicked.connect(self.reset)
+        self.radioBF.toggled.connect(lambda: self.radio_handler(0))
+        self.radioB.toggled.connect(lambda: self.radio_handler(1))
+        self.radioF.toggled.connect(lambda: self.radio_handler(2))
+        self.textbox_ins.cursorPosition()
 
+    def radio_handler(self, status):
+        if status == 0:
+            self.line_2.setVisible(True)
+            self.binomial_widget.setVisible(True)
+            self.fibonacci_widget.setVisible(True)
+        else:
+            self.line_2.setVisible(False)
+            if status == 1:
+                self.binomial_widget.setVisible(True)
+                self.fibonacci_widget.setVisible(False)
+            else:
+                self.fibonacci_widget.setVisible(True)
+                self.binomial_widget.setVisible(False)
+
+    def reset(self):
+        self.BHeap = BinomialHeap()
+        self.FHeap = FibonacciHeap()
+        self.timestamp.setText("")
+        self.BHeap.visualizeTree()
+        self.FHeap.visualizeTree()
+        self.updateImg()
 
     def updateImg(self):
         self.BHeap.visualizeTree()
