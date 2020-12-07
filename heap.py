@@ -131,7 +131,7 @@ class BinomialHeap:
 
     def search(self, k, x = None):
         p = None
-        
+
         if self.H != None:
             if (x == None):
                 x = self.H
@@ -212,6 +212,7 @@ class BinomialHeap:
             z = z.parent
         return p
 
+    @timing
     def delete(self,k):
         if (self.H == None):
             print("L'heap è vuoto")
@@ -461,12 +462,13 @@ class FibonacciHeap:
         node.left.right = node.right
         node.right.left = node.left
 
-
+    @timing
     def delete(self,x):
 
         d = self.decreaseKey(x,-sys.maxsize)
         if d:
             self.extractMin()
+        return self
 
 
     def info(self,x = None):
@@ -505,10 +507,3 @@ class FibonacciHeap:
         if (p.parent == None):
             text+= "{0} [label={1}]\n".format(str(id(p)),p.n)
         return text
-
-
-B = BinomialHeap()
-
-B.insert(1)
-B.delete(1)
-B.visualizeTree()
